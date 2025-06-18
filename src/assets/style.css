@@ -1,0 +1,76 @@
+.navbar,
+.footer {
+  background-color: #333;
+  color: white;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+}
+.contentOutlet {
+  width: 90%;
+  margin: 60px auto;
+}
+.footer {
+  bottom: 0;
+  top: unset;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.productsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table thead {
+  background-color: #1b75bb;
+  color: #fff;
+}
+
+table th,
+table td {
+  height: 40px;
+  text-align: center;
+}
+.invoice-sidebar {
+  width: 250px;
+  position: fixed;
+  border: 1px solid #1f1f1f;
+  border-top-color: #d9edf7;
+  padding: 0 10px 10px;
+  border-radius: 8px;
+}
+
+.invoice-sidebar h4 {
+  margin: 0;
+  background: #d9edf7;
+  padding: 12px 10px;
+  margin-bottom: 20px;
+  width: 252px;
+  margin-right: -12px;
+  color: #31708f;
+  border-radius: 8px 8px 0 0;
+  margin-top: -1px;
+}
