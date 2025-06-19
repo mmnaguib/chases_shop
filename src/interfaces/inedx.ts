@@ -1,7 +1,7 @@
 export interface ICategory {
   _id: string;
   name: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface IItem {
@@ -11,5 +11,5 @@ export interface IItem {
   sellPrice: number;
   categoryId: { name: string };
   image?: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
