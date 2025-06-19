@@ -1,11 +1,14 @@
 import { faFile, faMoneyBill, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import PaymentPopup from "./PaymentPopup";
 
 const InvoiceSideBar = () => {
   const [date, setDate] = React.useState<string>("");
   const [vendor, setVendor] = React.useState<string>("");
   const [notes, setNotes] = React.useState<string>("");
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <div className="invoice-sidebar">
       <h4>البيانات الاساسية</h4>
@@ -38,7 +41,11 @@ const InvoiceSideBar = () => {
       </div>
       <br />
       <div style={{ textAlign: "center" }}>
-        <button className="success" style={{ width: "150px" }}>
+        <button
+          className="success"
+          style={{ width: "150px" }}
+          onClick={() => setIsOpen(true)}
+        >
           <FontAwesomeIcon icon={faMoneyBill} /> سداد
         </button>
       </div>
@@ -55,6 +62,8 @@ const InvoiceSideBar = () => {
         </button>
       </div>
       <br />
+
+      <PaymentPopup isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };

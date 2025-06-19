@@ -1,17 +1,16 @@
-import React from "react";
 import InvoiceSideBar from "../InvoiceSideBar";
 import AddInvoice from "../AddInvoice";
 
-const Purchases = () => {
+const Sales = () => {
   return (
     <div>
-      <h1 className="pageHeader">فاتورة شراء</h1>
+      <h1 className="pageHeader">فاتورة بيع</h1>
       <div className="invoiceContainer">
         <InvoiceSideBar />
-        <AddInvoice invoiceType="P" />
+        <AddInvoice invoiceType="S" />
       </div>
     </div>
   );
 };
 
-export default Purchases;
+export default Sales;
