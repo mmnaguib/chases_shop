@@ -1,13 +1,21 @@
 import { faFile, faMoneyBill, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import PaymentPopup from "./PaymentPopup";
+import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendors";
 
-const InvoiceSideBar = () => {
+const InvoiceSideBar = ({
+  restMoney,
+  invoiceType,
+}: {
+  restMoney: number;
+  invoiceType: string;
+}) => {
   const [date, setDate] = React.useState<string>("");
   const [vendor, setVendor] = React.useState<string>("");
   const [notes, setNotes] = React.useState<string>("");
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isNewClient, setIsNewClient] = useState(false);
 
   return (
     <div className="invoice-sidebar">
@@ -22,13 +30,15 @@ const InvoiceSideBar = () => {
         />
       </div>
       <div>
-        <label>المورد</label>
+        <label>{invoiceType == "P" ? "المورد" : "العميل"}</label>
         <select value={vendor} onChange={(e) => setVendor(e.target.value)}>
           <option value="" selected disabled>
-            اختر المورد
+            اختر
           </option>
-          <option value="vendor1">المورد 1</option>
         </select>
+        <button className="edit sm" onClick={() => setIsNewClient(true)}>
+          +
+        </button>
       </div>
       <div>
         <label>ملاحظات</label>
@@ -63,7 +73,17 @@ const InvoiceSideBar = () => {
       </div>
       <br />
 
-      <PaymentPopup isOpen={isOpen} setIsOpen={setIsOpen} />
+      <PaymentPopup
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        restMoney={restMoney}
+      />
+
+      <ClientsAndVendors
+        invoiceType={invoiceType}
+        isNewClient={isNewClient}
+        setIsNewClient={setIsNewClient}
+      />
     </div>
   );
 };

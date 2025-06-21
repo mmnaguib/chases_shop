@@ -12,4 +12,5 @@ export interface IItem {
   categoryId: { name: string };
   image?: string;
   createdAt?: Date;
+  quantity: number;
 }

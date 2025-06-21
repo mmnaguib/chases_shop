@@ -3,19 +3,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ICategory, IItem } from "../../interfaces/inedx";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../Api/axiosInstance";
-import { toast } from "react-toastify";
 
-const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
+const AddInvoice = ({
+  invoiceType,
+  setRestMoney,
+}: {
+  invoiceType: string;
+  setRestMoney: any;
+}) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [items, setItems] = useState<IItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
-  const [quantity, setQuantity] = useState<number>(1);
   const [quantityAvailabel, setQuantityAvailabel] = useState<number>(1);
   const [invoiceItems, setInvoiceItems] = useState<IItem[]>([]);
   const [formQuantity, setFormQuantity] = useState<number>(1);
-
+  const [discountValue, setDiscountValue] = useState<number>(0);
+  const [profit, setProfit] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const getCategories = async () => {
     const res = await axiosInstance.get("/categories");
     if (res.status === 200) {
@@ -23,13 +29,13 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
       setSelectedCategoryId(res.data[0]._id);
     }
   };
+
   const getItems = async (categoryId: string) => {
     const res = await axiosInstance.get(
       `/products/categoryItems/${categoryId}`
     );
     if (res.status === 200) {
       setItems(res.data);
-      console.log(res.data);
       setSelectedItemId(res.data[0]._id);
       setPrice(
         invoiceType === "P" ? res.data[0].buyPrice : res.data[0].sellPrice
@@ -37,65 +43,68 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
       setQuantityAvailabel(0);
     }
   };
+
   useEffect(() => {
     getCategories();
   }, []);
+
   useEffect(() => {
     if (selectedCategoryId) {
       getItems(selectedCategoryId);
     }
   }, [selectedCategoryId]);
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    setInvoiceItems((prev) =>
-      prev.map((item) =>
-        item._id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
+  useEffect(() => {
+    if (selectedItemId) {
+      const selectedItem = items.find((item) => item._id === selectedItemId);
+      if (selectedItem) {
+        setPrice(
+          invoiceType === "P" ? selectedItem.buyPrice : selectedItem.sellPrice
+        );
+        setQuantityAvailabel(selectedItem.quantity);
+      }
+    }
+  }, [selectedItemId, items, invoiceType]);
 
-  const updatePrice = (id: string, newPrice: number, type: "buy" | "sell") => {
-    setInvoiceItems((prev) =>
-      prev.map((item) =>
-        item._id === id
-          ? { ...item, [type === "buy" ? "buyPrice" : "sellPrice"]: newPrice }
-          : item
-      )
+  useEffect(() => {
+    const total = invoiceItems.reduce(
+      (acc, item) =>
+        acc +
+        (invoiceType === "P" ? item.buyPrice : item.sellPrice) * item.quantity,
+      0
     );
-  };
+    setTotalPrice(total);
+    setProfit(total - discountValue);
+    setRestMoney(total - discountValue);
+  }, [invoiceItems, discountValue, invoiceType]);
 
   const addToGrid = () => {
     const selectedItem = items.find((item) => item._id === selectedItemId);
     if (!selectedItem) return;
 
     setInvoiceItems((prev) => {
-      const exists = prev.find((item) => item._id === selectedItemId);
-
-      if (exists) {
-        // زود الكمية بس
+      const existingItem = prev.find((item) => item._id === selectedItemId);
+      if (existingItem) {
         return prev.map((item) =>
           item._id === selectedItemId
-            ? { ...item, quantity: quantity + formQuantity }
+            ? { ...item, quantity: item.quantity + formQuantity }
             : item
         );
+      } else {
+        return [
+          ...prev,
+          {
+            _id: selectedItem._id,
+            name: selectedItem.name,
+            categoryId: selectedItem.categoryId,
+            buyPrice: selectedItem.buyPrice,
+            sellPrice: selectedItem.sellPrice,
+            quantity: formQuantity,
+          },
+        ];
       }
-
-      // إضافة جديدة
-      return [
-        ...prev,
-        {
-          _id: selectedItem._id,
-          name: selectedItem.name,
-          categoryId: selectedItem.categoryId,
-          buyPrice: selectedItem.buyPrice,
-          sellPrice: selectedItem.sellPrice,
-          quantity: formQuantity,
-        },
-      ];
     });
 
-    // تصفير الفورم
-    setSelectedItemId("");
     setFormQuantity(1);
   };
 
@@ -162,6 +171,7 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
               min={0}
               value={quantityAvailabel}
               onChange={(e) => setQuantityAvailabel(+e.target.value)}
+              readOnly
             />
           </div>
           <div>
@@ -172,6 +182,7 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
           </div>
         </div>
       </div>
+
       <div className="invoiceGrid">
         <table className="tableStyle" border={1}>
           <thead>
@@ -190,36 +201,32 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
                 <td>{invoiceItem.categoryId.name}</td>
                 <td>{invoiceItem.name}</td>
                 <td>
-                  <input
-                    type="number"
-                    value={
-                      invoiceType === "P"
-                        ? invoiceItem.buyPrice
-                        : invoiceItem.sellPrice
-                    }
-                    onChange={(e) =>
-                      updatePrice(
-                        invoiceItem._id,
-                        +e.target.value,
-                        invoiceType === "P" ? "buy" : "sell"
-                      )
-                    }
-                  />
+                  {invoiceType === "P"
+                    ? invoiceItem.buyPrice
+                    : invoiceItem.sellPrice}
                 </td>
                 <td>
                   <input
                     type="number"
-                    value={quantity}
-                    onChange={(e) =>
-                      updateQuantity(invoiceItem._id, +e.target.value)
-                    }
+                    value={invoiceItem.quantity}
+                    min={1}
+                    onChange={(e) => {
+                      const newQty = +e.target.value;
+                      setInvoiceItems((prev) =>
+                        prev.map((item) =>
+                          item._id === invoiceItem._id
+                            ? { ...item, quantity: newQty }
+                            : item
+                        )
+                      );
+                    }}
                   />
                 </td>
                 <td>
                   {(
                     (invoiceType === "P"
                       ? invoiceItem.buyPrice
-                      : invoiceItem.sellPrice) * quantity
+                      : invoiceItem.sellPrice) * invoiceItem.quantity
                   ).toFixed(2)}
                 </td>
                 <td>
@@ -235,28 +242,36 @@ const AddInvoice = ({ invoiceType }: { invoiceType: string }) => {
           </tbody>
         </table>
       </div>
+
       <div className="addInvoiceHeader" style={{ marginTop: "20px" }}>
         <h4>قيم الفاتورة</h4>
         <div className="addInvoiceContentToAdd">
           <div>
             <label htmlFor="itemsNumber">عدد الاصناف</label>
-            <input type="number" id="itemsNumber" disabled />
+            <input
+              type="number"
+              id="itemsNumber"
+              value={invoiceItems.length}
+              disabled
+            />
           </div>
           <div>
             <label htmlFor="totalPrice">إجمالي السعر</label>
-            <input type="number" id="totalPrice" min={1} disabled />
+            <input type="number" id="totalPrice" value={totalPrice} disabled />
           </div>
           <div>
             <label htmlFor="discountValue">خصم بالقيمة</label>
-            <input type="number" id="discountValue" min={0} />
-          </div>
-          <div>
-            <label htmlFor="discountPersentage">نسبة الخصم %</label>
-            <input type="number" id="discountPersentage" min={0} />
+            <input
+              type="number"
+              id="discountValue"
+              min={0}
+              value={discountValue}
+              onChange={(e) => setDiscountValue(+e.target.value)}
+            />
           </div>
           <div>
             <label htmlFor="profit">الصافي</label>
-            <input type="number" id="profit" min={1} disabled />
+            <input type="number" id="profit" min={1} disabled value={profit} />
           </div>
         </div>
       </div>

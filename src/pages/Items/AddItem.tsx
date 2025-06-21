@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import categoriesApi from "../../Api/categoriesApi";
 import { ICategory } from "../../interfaces/inedx";
 import itemsApi from "../../Api/itemsApi";
@@ -17,6 +17,7 @@ const AddItem = ({
   const [costPrice, setcostPrice] = React.useState<number>(0);
   const [sellPrice, setsellPrice] = React.useState<number>(0);
   const [categories, setCategories] = React.useState<ICategory[]>([]);
+  const [quantity, setQuantity] = useState<number>(0);
   const getCategories = async () => {
     const res = await categoriesApi.getCategories();
     setCategories(res.data);
@@ -36,6 +37,7 @@ const AddItem = ({
     formData.append("categoryId", categoryId);
     formData.append("buyPrice", costPrice.toString());
     formData.append("sellPrice", sellPrice.toString());
+    formData.append("quantity", quantity.toString());
     formData.append("image", image);
     const res = await itemsApi.addNewItem(formData);
     if (res.status === 201) {
@@ -119,6 +121,17 @@ const AddItem = ({
                   onChange={(e) => setsellPrice(+e.target.value)}
                 />
               </div>
+              <div>
+                <label htmlFor="quantity">الكمية المتاحة</label>
+                <input
+                  type="number"
+                  id="quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(+e.target.value)}
+                  readOnly
+                />
+              </div>
+
               <button className="success" type="submit">
                 حفظ
               </button>
