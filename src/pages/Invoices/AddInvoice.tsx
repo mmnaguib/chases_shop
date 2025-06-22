@@ -103,8 +103,8 @@ const AddInvoice = ({
             _id: selectedItem._id,
             name: selectedItem.name,
             categoryId: selectedItem.categoryId,
-            buyPrice: selectedItem.buyPrice,
-            sellPrice: selectedItem.sellPrice,
+            buyPrice: invoiceType === "P" ? price : selectedItem.buyPrice,
+            sellPrice: invoiceType === "S" ? price : selectedItem.sellPrice,
             quantity: formQuantity,
           },
         ];
