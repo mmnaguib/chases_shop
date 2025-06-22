@@ -6,10 +6,16 @@ import axiosInstance from "../../Api/axiosInstance";
 
 const AddInvoice = ({
   invoiceType,
-  setRestMoney,
+  setfinalPrice,
+  setInvoiceItemsProp,
+  setDiscountValue,
+  discountValue,
 }: {
   invoiceType: string;
-  setRestMoney: any;
+  setfinalPrice: any;
+  setInvoiceItemsProp: any;
+  setDiscountValue: any;
+  discountValue: number;
 }) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
@@ -19,7 +25,6 @@ const AddInvoice = ({
   const [quantityAvailabel, setQuantityAvailabel] = useState<number>(1);
   const [invoiceItems, setInvoiceItems] = useState<IItem[]>([]);
   const [formQuantity, setFormQuantity] = useState<number>(1);
-  const [discountValue, setDiscountValue] = useState<number>(0);
   const [profit, setProfit] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const getCategories = async () => {
@@ -75,7 +80,8 @@ const AddInvoice = ({
     );
     setTotalPrice(total);
     setProfit(total - discountValue);
-    setRestMoney(total - discountValue);
+    setfinalPrice(total - discountValue);
+    setInvoiceItemsProp(invoiceItems);
   }, [invoiceItems, discountValue, invoiceType]);
 
   const addToGrid = () => {

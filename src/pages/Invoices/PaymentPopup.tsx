@@ -1,31 +1,65 @@
 import React, { useState } from "react";
+import InvoicesApi from "../../Api/invoiceApi";
+import { IItem } from "../../interfaces/inedx";
 
 const PaymentPopup = ({
   isOpen,
   setIsOpen,
-  restMoney,
+  finalPrice,
+  date,
+  selectedUser,
+  notes,
+  invoiceItemsProp,
+  discountValue,
+  invoiceType,
 }: {
   isOpen: boolean;
   setIsOpen: (val: boolean) => void;
-  restMoney: number;
+  finalPrice: number;
+  date: string;
+  selectedUser: string;
+  notes: string;
+  invoiceItemsProp: any;
+  discountValue: number;
+  invoiceType: string;
 }) => {
-  const [payments, setPayments] = useState<{ type: string; amount: number }[]>(
-    []
-  );
+  const [payments, setPayments] = useState<
+    { method: string; amount: number }[]
+  >([]);
   const [paymentType, setPaymentType] = useState("كاش");
   const [amount, setAmount] = useState(0);
 
   const handleAddPayment = () => {
     if (amount > 0) {
-      setPayments([...payments, { type: paymentType, amount }]);
+      setPayments([...payments, { method: paymentType, amount }]);
       setAmount(0);
       setPaymentType("كاش");
     }
   };
 
+  const invoiceItems = invoiceItemsProp.map((item: IItem) => ({
+    productId: item._id,
+    unitPrice: invoiceType === "P" ? item.buyPrice : item.sellPrice,
+    quantity: item.quantity,
+  }));
   const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
-  const remaining = restMoney - totalPaid;
+  const remaining = Number(finalPrice) - totalPaid;
+  console.log(typeof remaining);
 
+  const handleSaveInvoice = async () => {
+    const res = await InvoicesApi.addNewInvoice(
+      invoiceType,
+      date,
+      selectedUser,
+      invoiceItems,
+      discountValue,
+      notes,
+      totalPaid,
+      finalPrice,
+      payments,
+      remaining
+    );
+  };
   return (
     <div>
       {isOpen && (
@@ -42,7 +76,7 @@ const PaymentPopup = ({
               <tbody>
                 {payments.map((p, index) => (
                   <tr key={index}>
-                    <td>{p.type}</td>
+                    <td>{p.method}</td>
                     <td>{p.amount}</td>
                     <td>✓</td>
                   </tr>
@@ -79,10 +113,7 @@ const PaymentPopup = ({
               الباقي: {remaining}
             </div>
             <div>
-              <button
-                className="success"
-                onClick={() => console.log("Payments:", payments)}
-              >
+              <button className="success" onClick={handleSaveInvoice}>
                 حفظ
               </button>
               <button className="danger" onClick={() => setIsOpen(false)}>

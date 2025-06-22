@@ -1,22 +1,42 @@
 import { faFile, faMoneyBill, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PaymentPopup from "./PaymentPopup";
 import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendors";
+import { IUser } from "../../interfaces/inedx";
+import UsersApi from "../../Api/userApi";
 
 const InvoiceSideBar = ({
-  restMoney,
+  finalPrice,
   invoiceType,
+  invoiceItemsProp,
+  discountValue,
 }: {
-  restMoney: number;
+  finalPrice: number;
   invoiceType: string;
+  invoiceItemsProp: any;
+  discountValue: number;
 }) => {
-  const [date, setDate] = React.useState<string>("");
-  const [vendor, setVendor] = React.useState<string>("");
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
   const [notes, setNotes] = React.useState<string>("");
   const [isOpen, setIsOpen] = React.useState(false);
   const [isNewClient, setIsNewClient] = useState(false);
 
+  const [users, setUsers] = useState<IUser[]>([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const getAllUsers = async () => {
+    const res = await UsersApi.getAllByType(invoiceType === "P" ? "S" : "C");
+    if (res.status === 200) {
+      setUsers(res.data);
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
   return (
     <div className="invoice-sidebar">
       <h4>البيانات الاساسية</h4>
@@ -30,11 +50,19 @@ const InvoiceSideBar = ({
         />
       </div>
       <div>
-        <label>{invoiceType == "P" ? "المورد" : "العميل"}</label>
-        <select value={vendor} onChange={(e) => setVendor(e.target.value)}>
+        <label>{invoiceType === "P" ? "المورد" : "العميل"}</label>
+        <select
+          value={selectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)}
+        >
           <option value="" selected disabled>
             اختر
           </option>
+          {users.map((user) => (
+            <option key={user._id} value={user._id}>
+              {user.name}
+            </option>
+          ))}
         </select>
         <button className="edit sm" onClick={() => setIsNewClient(true)}>
           +
@@ -76,13 +104,20 @@ const InvoiceSideBar = ({
       <PaymentPopup
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        restMoney={restMoney}
+        finalPrice={finalPrice}
+        date={date}
+        selectedUser={selectedUser}
+        notes={notes}
+        invoiceItemsProp={invoiceItemsProp}
+        discountValue={discountValue}
+        invoiceType={invoiceType}
       />
 
       <ClientsAndVendors
         invoiceType={invoiceType}
         isNewClient={isNewClient}
         setIsNewClient={setIsNewClient}
+        getAllUsers={getAllUsers}
       />
     </div>
   );

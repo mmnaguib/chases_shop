@@ -3,14 +3,27 @@ import AddInvoice from "../AddInvoice";
 import { useState } from "react";
 
 const Sales = () => {
-  const [restMoney, setRestMoney] = useState(0);
+  const [finalPrice, setfinalPrice] = useState(0);
+  const [invoiceItemsProp, setInvoiceItemsProp] = useState([]);
+  const [discountValue, setDiscountValue] = useState<number>(0);
 
   return (
     <div>
       <h1 className="pageHeader">فاتورة بيع</h1>
       <div className="invoiceContainer">
-        <InvoiceSideBar invoiceType="S" restMoney={restMoney} />
-        <AddInvoice invoiceType="S" setRestMoney={setRestMoney} />
+        <InvoiceSideBar
+          invoiceType="S"
+          finalPrice={finalPrice}
+          invoiceItemsProp={invoiceItemsProp}
+          discountValue={discountValue}
+        />
+        <AddInvoice
+          invoiceType="S"
+          setfinalPrice={setfinalPrice}
+          setInvoiceItemsProp={setInvoiceItemsProp}
+          setDiscountValue={setDiscountValue}
+          discountValue={discountValue}
+        />
       </div>
     </div>
   );

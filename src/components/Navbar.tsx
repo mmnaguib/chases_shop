@@ -24,6 +24,9 @@ const Navbar = () => {
           <li>
             <NavLink to="/sales">فاتورة بيع</NavLink>
           </li>
+          <li>
+            <NavLink to="/invoices">الفواتير</NavLink>
+          </li>
         </ul>
       </nav>
       <h3>Aboda Shop</h3>
