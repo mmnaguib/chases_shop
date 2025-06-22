@@ -8,6 +8,7 @@ import Categoies from "./pages/Categories";
 import Items from "./pages/Items/Items";
 import { ToastContainer } from "react-toastify";
 import InvoicesTable from "./pages/Invoices/InvoicesTable";
+import UserInvoices from "./pages/Invoices/UserInvoices";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="purchases" element={<Purchases />} />
             <Route path="sales" element={<Sales />} />
             <Route path="invoices" element={<InvoicesTable />} />
+            <Route path="user/:id" element={<UserInvoices />} />
           </Route>
         </Routes>
       </BrowserRouter>

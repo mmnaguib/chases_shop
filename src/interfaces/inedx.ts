@@ -25,16 +25,15 @@ export interface IUser {
 }
 
 export interface IInvoice {
+  _id: string;
   type: string;
   date: string;
-  userId: { name: string };
-  items: [
-    {
-      productId: string;
-      unitPrice: number;
-      qunatity: number;
-    }
-  ];
+  userId: { name: string; _id: string };
+  items: {
+    productId: string;
+    unitPrice: number;
+    quantity: number;
+  }[];
   discount: string;
   notes: string;
   totalPrice: number;

@@ -5,6 +5,7 @@ import PaymentPopup from "./PaymentPopup";
 import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendors";
 import { IUser } from "../../interfaces/inedx";
 import UsersApi from "../../Api/userApi";
+import { toast } from "react-toastify";
 
 const InvoiceSideBar = ({
   finalPrice,
@@ -31,12 +32,21 @@ const InvoiceSideBar = ({
     const res = await UsersApi.getAllByType(invoiceType === "P" ? "S" : "C");
     if (res.status === 200) {
       setUsers(res.data);
+      //setSelectedUser(res.data[0].name);
     }
   };
 
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  const paymentPopupHandler = () => {
+    if (finalPrice <= 0) {
+      toast.error("يجب ان يكون المبلغ اكبر من السعر");
+      return;
+    }
+    setIsOpen(true);
+  };
   return (
     <div className="invoice-sidebar">
       <h4>البيانات الاساسية</h4>
@@ -82,7 +92,7 @@ const InvoiceSideBar = ({
         <button
           className="success"
           style={{ width: "150px" }}
-          onClick={() => setIsOpen(true)}
+          onClick={paymentPopupHandler}
         >
           <FontAwesomeIcon icon={faMoneyBill} /> سداد
         </button>
@@ -111,6 +121,7 @@ const InvoiceSideBar = ({
         invoiceItemsProp={invoiceItemsProp}
         discountValue={discountValue}
         invoiceType={invoiceType}
+        mode="create"
       />
 
       <ClientsAndVendors

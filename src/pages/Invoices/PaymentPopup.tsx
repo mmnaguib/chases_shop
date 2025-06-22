@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InvoicesApi from "../../Api/invoiceApi";
-import { IItem } from "../../interfaces/inedx";
+import { IInvoice, IItem } from "../../interfaces/inedx";
+
+type PaymentPopupProps = {
+  isOpen: boolean;
+  setIsOpen: (val: boolean) => void;
+  mode: "create" | "pay";
+  invoiceId?: string;
+  finalPrice: number;
+  date?: string;
+  selectedUser?: string;
+  notes?: string;
+  invoiceItemsProp?: any;
+  discountValue?: number;
+  invoiceType?: string;
+  payments?: { method: string; amount: number }[];
+};
 
 const PaymentPopup = ({
   isOpen,
   setIsOpen,
+  mode,
+  invoiceId,
   finalPrice,
   date,
   selectedUser,
@@ -12,54 +29,53 @@ const PaymentPopup = ({
   invoiceItemsProp,
   discountValue,
   invoiceType,
-}: {
-  isOpen: boolean;
-  setIsOpen: (val: boolean) => void;
-  finalPrice: number;
-  date: string;
-  selectedUser: string;
-  notes: string;
-  invoiceItemsProp: any;
-  discountValue: number;
-  invoiceType: string;
-}) => {
-  const [payments, setPayments] = useState<
-    { method: string; amount: number }[]
-  >([]);
+  payments = [],
+}: PaymentPopupProps) => {
   const [paymentType, setPaymentType] = useState("كاش");
   const [amount, setAmount] = useState(0);
+  const [localPayments, setLocalPayments] = useState(payments);
 
   const handleAddPayment = () => {
     if (amount > 0) {
-      setPayments([...payments, { method: paymentType, amount }]);
+      setLocalPayments([...localPayments, { method: paymentType, amount }]);
       setAmount(0);
       setPaymentType("كاش");
     }
   };
 
-  const invoiceItems = invoiceItemsProp.map((item: IItem) => ({
-    productId: item._id,
-    unitPrice: invoiceType === "P" ? item.buyPrice : item.sellPrice,
-    quantity: item.quantity,
-  }));
-  const totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
+  const invoiceItems = invoiceItemsProp
+    ? invoiceItemsProp.map((item: IItem) => ({
+        productId: item._id,
+        unitPrice: invoiceType === "P" ? item.buyPrice : item.sellPrice,
+        quantity: item.quantity,
+      }))
+    : [];
+
+  const totalPaid = localPayments.reduce((sum, p) => sum + p.amount, 0);
   const remaining = Number(finalPrice) - totalPaid;
-  console.log(typeof remaining);
 
   const handleSaveInvoice = async () => {
-    const res = await InvoicesApi.addNewInvoice(
-      invoiceType,
-      date,
-      selectedUser,
-      invoiceItems,
-      discountValue,
-      notes,
-      totalPaid,
-      finalPrice,
-      payments,
-      remaining
-    );
+    if (mode === "create") {
+      await InvoicesApi.addNewInvoice(
+        invoiceType!,
+        date!,
+        selectedUser!,
+        invoiceItems,
+        discountValue!,
+        notes!,
+        totalPaid,
+        finalPrice,
+        localPayments,
+        remaining
+      );
+    } else if (mode === "pay" && invoiceId) {
+      const newPayments = localPayments.slice(payments.length);
+      await InvoicesApi.payAgain(invoiceId, newPayments);
+    }
+
+    setIsOpen(false);
   };
+
   return (
     <div>
       {isOpen && (
@@ -74,7 +90,7 @@ const PaymentPopup = ({
                 </tr>
               </thead>
               <tbody>
-                {payments.map((p, index) => (
+                {localPayments.map((p, index) => (
                   <tr key={index}>
                     <td>{p.method}</td>
                     <td>{p.amount}</td>
@@ -114,7 +130,7 @@ const PaymentPopup = ({
             </div>
             <div>
               <button className="success" onClick={handleSaveInvoice}>
-                حفظ
+                {mode === "create" ? "حفظ الفاتورة" : "تحديث السداد"}
               </button>
               <button className="danger" onClick={() => setIsOpen(false)}>
                 إلغاء
