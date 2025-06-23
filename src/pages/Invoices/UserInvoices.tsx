@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import InvoicesApi from "../../Api/invoiceApi";
 import { IInvoice } from "../../interfaces/inedx";
+import PaymentPopup from "./PaymentPopup";
 
 const UserInvoices = () => {
   const [userInvoices, setUserInvoices] = useState<IInvoice[]>([]);
@@ -9,6 +10,8 @@ const UserInvoices = () => {
     const res = await InvoicesApi.getUserInvoices(userId);
     setUserInvoices(res.data);
   };
+  const [selectedInvoice, setSelectedInvoice] = useState<IInvoice | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     getUserInvoices(id!);
@@ -16,9 +19,7 @@ const UserInvoices = () => {
   const { id } = useParams();
   return (
     <div>
-      <h5>
-        فواتير الاستاذ : {userInvoices.map((invioce) => invioce.userId.name)}
-      </h5>
+      <h5>فواتير الاستاذ : {userInvoices[0].userId.name}</h5>
       <table className="tableStyle" border={1}>
         <thead>
           <tr>
@@ -46,23 +47,33 @@ const UserInvoices = () => {
               <td>{invoice.finalPrice}</td>
               <td>{invoice.totalPrice}</td>
               <td>{invoice.remaining}</td>
-              {/* <td>
-                    {invoice.remaining > 0 && (
-                      <button
-                        className="success sm"
-                        onClick={() => {
-                          setSelectedInvoice(invoice);
-                          setIsPopupOpen(true);
-                        }}
-                      >
-                        سدد
-                      </button>
-                    )}
-                  </td> */}
+              <td>
+                {invoice.remaining > 0 && (
+                  <button
+                    className="success sm"
+                    onClick={() => {
+                      setSelectedInvoice(invoice);
+                      setIsPopupOpen(true);
+                    }}
+                  >
+                    سدد
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      {selectedInvoice && (
+        <PaymentPopup
+          isOpen={isPopupOpen}
+          setIsOpen={setIsPopupOpen}
+          mode="pay"
+          invoiceId={selectedInvoice._id}
+          finalPrice={selectedInvoice.finalPrice}
+          payments={selectedInvoice.paymentMethods}
+        />
+      )}
     </div>
   );
 };

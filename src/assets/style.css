@@ -139,3 +139,25 @@ table td {
   font-size: 10px;
   margin-top: 5px;
 }
+
+.homeDashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px;
+}
+
+.homeDashboard > .card {
+  min-width: 19%;
+  border: 2px solid #000;
+  text-align: center;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.homeDashboard > .card span {
+  font-weight: bold;
+  font-size: 25px;
+}

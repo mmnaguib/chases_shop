@@ -157,7 +157,31 @@ const AddInvoice = ({
               type="number"
               id="price"
               value={price}
-              onChange={(e) => setPrice(+e.target.value)}
+              onChange={async (e) => {
+                const newPrice = +e.target.value;
+                setPrice(newPrice);
+
+                // تعديل السعر في قاعدة البيانات
+                try {
+                  const selectedItem = items.find(
+                    (item) => item._id === selectedItemId
+                  );
+                  if (!selectedItem) return;
+
+                  const fieldToUpdate =
+                    invoiceType === "P" ? "buyPrice" : "sellPrice";
+                  const updateBody = {
+                    [fieldToUpdate]: newPrice,
+                  };
+
+                  await axiosInstance.patch(
+                    `/products/${selectedItemId}`,
+                    updateBody
+                  );
+                } catch (err) {
+                  console.error("خطأ أثناء تحديث السعر:", err);
+                }
+              }}
             />
           </div>
           <div>
@@ -182,7 +206,11 @@ const AddInvoice = ({
           </div>
           <div>
             <label className="hiddenLabel">.</label>
-            <button className="success" onClick={addToGrid}>
+            <button
+              className="success"
+              onClick={addToGrid}
+              disabled={!quantityAvailabel}
+            >
               إضافة
             </button>
           </div>

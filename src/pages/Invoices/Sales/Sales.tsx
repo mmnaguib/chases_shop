@@ -7,6 +7,7 @@ const Sales = () => {
   const [invoiceItemsProp, setInvoiceItemsProp] = useState([]);
   const [discountValue, setDiscountValue] = useState<number>(0);
 
+  const [adminExpenses, setAdminExpenses] = useState<number>(0);
   return (
     <div>
       <h1 className="pageHeader">فاتورة بيع</h1>
@@ -16,6 +17,8 @@ const Sales = () => {
           finalPrice={finalPrice}
           invoiceItemsProp={invoiceItemsProp}
           discountValue={discountValue}
+          setAdminExpenses={setAdminExpenses}
+          adminExpenses={adminExpenses}
         />
         <AddInvoice
           invoiceType="S"

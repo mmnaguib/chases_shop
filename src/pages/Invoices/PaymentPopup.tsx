@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import InvoicesApi from "../../Api/invoiceApi";
-import { IInvoice, IItem } from "../../interfaces/inedx";
+import { IItem } from "../../interfaces/inedx";
 
 type PaymentPopupProps = {
   isOpen: boolean;
@@ -15,6 +15,7 @@ type PaymentPopupProps = {
   discountValue?: number;
   invoiceType?: string;
   payments?: { method: string; amount: number }[];
+  adminExpenses?: number;
 };
 
 const PaymentPopup = ({
@@ -30,6 +31,8 @@ const PaymentPopup = ({
   discountValue,
   invoiceType,
   payments = [],
+
+  adminExpenses,
 }: PaymentPopupProps) => {
   const [paymentType, setPaymentType] = useState("كاش");
   const [amount, setAmount] = useState(0);
@@ -46,7 +49,8 @@ const PaymentPopup = ({
   const invoiceItems = invoiceItemsProp
     ? invoiceItemsProp.map((item: IItem) => ({
         productId: item._id,
-        unitPrice: invoiceType === "P" ? item.buyPrice : item.sellPrice,
+        unitPrice: item.sellPrice,
+        buyPrice: item.buyPrice,
         quantity: item.quantity,
       }))
     : [];
@@ -66,7 +70,8 @@ const PaymentPopup = ({
         totalPaid,
         finalPrice,
         localPayments,
-        remaining
+        remaining,
+        adminExpenses || 0
       );
     } else if (mode === "pay" && invoiceId) {
       const newPayments = localPayments.slice(payments.length);

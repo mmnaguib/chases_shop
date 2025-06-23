@@ -12,11 +12,15 @@ const InvoiceSideBar = ({
   invoiceType,
   invoiceItemsProp,
   discountValue,
+  setAdminExpenses,
+  adminExpenses,
 }: {
   finalPrice: number;
   invoiceType: string;
   invoiceItemsProp: any;
   discountValue: number;
+  setAdminExpenses: any;
+  adminExpenses: number;
 }) => {
   const [date, setDate] = useState(() => {
     const today = new Date();
@@ -43,6 +47,10 @@ const InvoiceSideBar = ({
   const paymentPopupHandler = () => {
     if (finalPrice <= 0) {
       toast.error("يجب ان يكون المبلغ اكبر من السعر");
+      return;
+    }
+    if (!selectedUser) {
+      toast.error("يجب إدخال اسم المستخدم");
       return;
     }
     setIsOpen(true);
@@ -87,6 +95,13 @@ const InvoiceSideBar = ({
           onChange={(e) => setNotes(e.target.value)}
         ></textarea>
       </div>
+
+      <input
+        type="number"
+        value={adminExpenses}
+        onChange={(e) => setAdminExpenses(+e.target.value)}
+        placeholder="مصروفات إدارية (شحن، بنزين...)"
+      />
       <br />
       <div style={{ textAlign: "center" }}>
         <button
@@ -122,6 +137,7 @@ const InvoiceSideBar = ({
         discountValue={discountValue}
         invoiceType={invoiceType}
         mode="create"
+        adminExpenses={adminExpenses}
       />
 
       <ClientsAndVendors

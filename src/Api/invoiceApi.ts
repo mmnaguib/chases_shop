@@ -17,7 +17,8 @@ const InvoicesApi = {
     totalPrice: number,
     finalPrice: number,
     paymentMethods: { method: string; amount: number }[],
-    remaining: number
+    remaining: number,
+    adminExpenses: number
   ) => {
     return await axiosInstance.post("/invoices", {
       type,
@@ -30,6 +31,7 @@ const InvoicesApi = {
       finalPrice,
       paymentMethods,
       remaining,
+      adminExpenses,
     });
   },
 
