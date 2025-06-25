@@ -22,7 +22,7 @@ const InvoiceChart = ({
           data={data}
           margin={{ top: 20, right: 30, bottom: 20, left: 10 }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid strokeDasharray="2 2" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip
