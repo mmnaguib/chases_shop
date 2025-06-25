@@ -1,16 +1,31 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
 .navbar,
 .footer {
+  height: 80px;
   background-color: #333;
   color: white;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
+  line-height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+}
+.navbar {
+  position: sticky;
+  top: 0;
+}
+.contentOutlet {
+  width: 90%;
+  flex: 1;
+  padding: 20px;
+  min-height: calc(100vh - 160px);
+  margin: 0 auto;
 }
 .navbar nav ul {
   display: flex;
@@ -27,14 +42,6 @@
 }
 .navbar nav a.active {
   border-bottom: 2px solid #fff;
-}
-.contentOutlet {
-  width: 90%;
-  margin: 60px auto;
-}
-.footer {
-  bottom: 0;
-  top: unset;
 }
 
 .modalOverlay {

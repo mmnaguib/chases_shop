@@ -37,6 +37,12 @@ const Home = () => {
     totalRevenue: number;
     netProfit: number;
     adminExpenses: number;
+    topProducts: { name: string; quantity: number }[];
+    purchasedProducts: { name: string; quantity: number }[];
+    totalPurchasedQuantity: number;
+    totalPurchases: number;
+    totalPurchaseRemaining: number;
+    totalPurchaseCost: number;
   }>({
     totalFinalPrice: 0,
     totalPaid: 0,
@@ -46,6 +52,12 @@ const Home = () => {
     totalRevenue: 0,
     netProfit: 0,
     adminExpenses: 0,
+    topProducts: [],
+    purchasedProducts: [],
+    totalPurchasedQuantity: 0,
+    totalPurchases: 0,
+    totalPurchaseRemaining: 0,
+    totalPurchaseCost: 0,
   });
 
   const getClientsCount = async () => {
@@ -103,35 +115,65 @@ const Home = () => {
       </div>
 
       <div className="card">
+        <h5>اجمالي المبيعات </h5>
+        <span>{solded.totalRevenue}</span>
+      </div>
+
+      <div className="card">
+        <h5>اجمالي المدفوع ليا</h5>
+        <span>{solded.totalPaid}</span>
+      </div>
+
+      <div className="card">
+        <h5>اجمالي المبالغ المتبقية ليا</h5>
+        <span>{solded.totalRemaining}</span>
+      </div>
+
+      <div className="card">
+        <h5>اجمالي الكمية المباعة {solded.totalQuantity}</h5>
+        <>
+          {solded.topProducts.map((product) => (
+            <div key={product.name}>
+              {product.name} : {product.quantity}
+            </div>
+          ))}
+        </>
+      </div>
+      <div className="card">
+        <h5>اجمالي المشتريات </h5>
+        <span>{solded.totalPurchaseCost}</span>
+      </div>
+
+      <div className="card">
+        <h5>اجمالي المدفوع مني</h5>
+        <span>{solded.totalPurchaseCost - solded.totalPurchaseRemaining}</span>
+      </div>
+
+      <div className="card">
+        <h5>اجمالي المبالغ المتبقية عليا</h5>
+        <span>{solded.totalPurchaseRemaining}</span>
+      </div>
+      <div className="card">
+        <h5>اجمالي الكمية المشتراه {solded.totalPurchasedQuantity}</h5>
+        <>
+          {solded.purchasedProducts.map((product) => (
+            <div key={product.name}>
+              {product.name} : {product.quantity}
+            </div>
+          ))}
+        </>
+      </div>
+
+      <div className="card">
         <h5>المصاريف الادارية </h5>
         <span>{solded.adminExpenses}</span>
       </div>
 
       <div className="card">
-        <h5>اجمالي المدفوع </h5>
-        <span>{solded.totalRevenue}</span>
-      </div>
-
-      <div className="card">
-        <h5>اجمالي المبيعات </h5>
-        <span>{solded.totalFinalPrice}</span>
-      </div>
-
-      <div className="card">
-        <h5>اجمالي الكمية المباعة </h5>
-        <span>{solded.totalQuantity}</span>
-      </div>
-
-      <div className="card">
-        <h5>اجمالي المبالغ المتبقية </h5>
-        <span>{solded.totalRemaining}</span>
-      </div>
-
-      <div className="card">
-        <h5>مجموع المبيعات - المشتريات (الربح) </h5>
+        <h5>الربح </h5>
         <span>{solded.netProfit}</span>
       </div>
-      <div className="card">
+      {/* <div className="card">
         <h5>الاعلي مبيعاَ </h5>
         {getTopProductsValues.map((product) => (
           <>
@@ -140,7 +182,7 @@ const Home = () => {
             <div>{product.remainingQuantity}</div>
           </>
         ))}
-      </div>
+      </div> */}
 
       <InvoiceChart data={getTopProductsValues} />
     </div>

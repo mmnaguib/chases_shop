@@ -209,7 +209,7 @@ const AddInvoice = ({
             <button
               className="success"
               onClick={addToGrid}
-              disabled={!quantityAvailabel}
+              disabled={invoiceType == "S" ? !quantityAvailabel : false}
             >
               إضافة
             </button>

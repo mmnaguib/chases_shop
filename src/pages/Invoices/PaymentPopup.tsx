@@ -1,6 +1,7 @@
 import { useState } from "react";
 import InvoicesApi from "../../Api/invoiceApi";
 import { IItem } from "../../interfaces/inedx";
+import { toast } from "react-toastify";
 
 type PaymentPopupProps = {
   isOpen: boolean;
@@ -59,6 +60,10 @@ const PaymentPopup = ({
   const remaining = Number(finalPrice) - totalPaid;
 
   const handleSaveInvoice = async () => {
+    if (totalPaid <= 0) {
+      toast.error("يجب دفع أي مبلغ .");
+      return;
+    }
     if (mode === "create") {
       await InvoicesApi.addNewInvoice(
         invoiceType!,
@@ -80,6 +85,12 @@ const PaymentPopup = ({
 
     setIsOpen(false);
   };
+  const handleDeletePayment = (indexToDelete: number) => {
+    const updatedPayments = localPayments.filter(
+      (_, idx) => idx !== indexToDelete
+    );
+    setLocalPayments(updatedPayments);
+  };
 
   return (
     <div>
@@ -99,7 +110,15 @@ const PaymentPopup = ({
                   <tr key={index}>
                     <td>{p.method}</td>
                     <td>{p.amount}</td>
-                    <td>✓</td>
+                    <td>
+                      <button
+                        className="danger sm"
+                        onClick={() => handleDeletePayment(index)}
+                        title="حذف الدفعة"
+                      >
+                        x
+                      </button>
+                    </td>
                   </tr>
                 ))}
                 <tr>
@@ -117,6 +136,7 @@ const PaymentPopup = ({
                       type="number"
                       value={amount}
                       onChange={(e) => setAmount(+e.target.value)}
+                      max={finalPrice}
                     />
                   </td>
                   <td>
@@ -124,6 +144,7 @@ const PaymentPopup = ({
                       سدد
                     </button>
                   </td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>

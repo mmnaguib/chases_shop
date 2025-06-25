@@ -1,4 +1,9 @@
-import { faFile, faMoneyBill, faSave } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFile,
+  faMoneyBill,
+  faPlus,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import PaymentPopup from "./PaymentPopup";
@@ -69,22 +74,28 @@ const InvoiceSideBar = ({
       </div>
       <div>
         <label>{invoiceType === "P" ? "المورد" : "العميل"}</label>
-        <select
-          value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
-        >
-          <option value="" selected disabled>
-            اختر
-          </option>
-          {users.map((user) => (
-            <option key={user._id} value={user._id}>
-              {user.name}
+        <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <select
+            value={selectedUser}
+            onChange={(e) => setSelectedUser(e.target.value)}
+          >
+            <option value="" selected disabled>
+              اختر
             </option>
-          ))}
-        </select>
-        <button className="edit sm" onClick={() => setIsNewClient(true)}>
-          +
-        </button>
+            {users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+          <button
+            className="edit sm"
+            onClick={() => setIsNewClient(true)}
+            style={{ width: "38px", height: "38px" }}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
       </div>
       <div>
         <label>ملاحظات</label>
@@ -96,12 +107,16 @@ const InvoiceSideBar = ({
         ></textarea>
       </div>
 
-      <input
-        type="number"
-        value={adminExpenses}
-        onChange={(e) => setAdminExpenses(+e.target.value)}
-        placeholder="مصروفات إدارية (شحن، بنزين...)"
-      />
+      <div>
+        <label>إضافات</label>
+        <input
+          type="number"
+          value={adminExpenses}
+          onChange={(e) => setAdminExpenses(+e.target.value)}
+          placeholder="مصروفات إدارية (شحن، بنزين...)"
+        />
+      </div>
+      <br />
       <br />
       <div style={{ textAlign: "center" }}>
         <button
@@ -116,12 +131,6 @@ const InvoiceSideBar = ({
       <div style={{ textAlign: "center" }}>
         <button className="edit" style={{ width: "150px" }}>
           <FontAwesomeIcon icon={faSave} /> حفظ
-        </button>
-      </div>
-      <br />
-      <div style={{ textAlign: "center" }}>
-        <button style={{ width: "150px" }}>
-          <FontAwesomeIcon icon={faFile} /> فاتورة جديدة
         </button>
       </div>
       <br />

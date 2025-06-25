@@ -33,6 +33,7 @@ export interface IInvoice {
     productId: string;
     unitPrice: number;
     quantity: number;
+    buyPrice: number;
   }[];
   discount: string;
   notes: string;

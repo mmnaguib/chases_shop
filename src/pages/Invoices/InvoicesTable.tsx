@@ -34,7 +34,9 @@ const InvoicesTable = () => {
             <th>رقم الفاتوره</th>
             <th>نوع الفاتوره</th>
             <th>{val === "P" ? "المورد" : "العميل"}</th>
+            <th>سعر الشراء</th>
             <th>الكمية</th>
+            <th>سعر البيع</th>
             <th>إجمالي السعر قبل الخصم</th>
             <th>قيمة الخصم</th>
             <th>إجمالي السعر بعد الخصم</th>
@@ -54,7 +56,9 @@ const InvoicesTable = () => {
                   {invoice.userId.name}
                 </Link>
               </td>
+              <td>{invoice.items.map((item) => item.buyPrice)}</td>
               <td>{invoice.items.map((item) => item.quantity)}</td>
+              <td>{invoice.items.map((item) => item.unitPrice)}</td>
               <td>{invoice.finalPrice + invoice.discount}</td>
               <td>{invoice.discount}</td>
               <td>{invoice.finalPrice}</td>
