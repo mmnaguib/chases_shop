@@ -168,3 +168,30 @@ table td {
   font-weight: bold;
   font-size: 25px;
 }
+
+.usersContent{
+  display: flex;
+}
+.usersContent > div {
+  flex: 1;
+  margin-left: 10px;
+  border-left: 1px solid #f00;
+}
+.usersContent  h5{
+  display: flex;
+  justify-content: space-between;
+}
+.usersContent .user{
+  box-shadow: 0 0 5px 5px #eaeaea;
+  margin-bottom: 15px;
+  padding: 7px;
+  border-radius: 8px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.usersContent > div:last-of-type{
+  border: 0;
+}

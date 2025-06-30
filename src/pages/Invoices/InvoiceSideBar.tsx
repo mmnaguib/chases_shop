@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import PaymentPopup from "./PaymentPopup";
-import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendors";
+import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendorsPopup";
 import { IUser } from "../../interfaces/inedx";
 import UsersApi from "../../Api/userApi";
 import { toast } from "react-toastify";

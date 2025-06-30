@@ -19,7 +19,7 @@ const UserInvoices = () => {
   const { id } = useParams();
   return (
     <div>
-      <h5>فواتير الاستاذ : {userInvoices[0].userId.name}</h5>
+      <h5>فواتير الاستاذ : {userInvoices[0]?.userId.name}</h5>
       <table className="tableStyle" border={1}>
         <thead>
           <tr>

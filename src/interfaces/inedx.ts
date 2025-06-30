@@ -30,7 +30,7 @@ export interface IInvoice {
   date: string;
   userId: { name: string; _id: string };
   items: {
-    productId: string;
+    productId: { name: string };
     unitPrice: number;
     quantity: number;
     buyPrice: number;

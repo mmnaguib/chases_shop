@@ -27,6 +27,9 @@ const Navbar = () => {
           <li>
             <NavLink to="/invoices">الفواتير</NavLink>
           </li>
+          <li>
+            <NavLink to="/users">العملاء و الموردين</NavLink>
+          </li>
         </ul>
       </nav>
       <h3>Aboda Shop</h3>

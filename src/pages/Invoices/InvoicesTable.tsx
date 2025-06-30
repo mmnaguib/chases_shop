@@ -19,6 +19,79 @@ const InvoicesTable = () => {
     const res = await InvoicesApi.getAllInvoices(type);
     setInvoices(res.data);
   };
+  const handlePrint = (invoice: IInvoice) => {
+    const printWindow = window.open("", "_blank", "width=800,height=600");
+    if (!printWindow) return;
+
+    const invoiceHTML = `
+    <html dir="rtl" lang="ar">
+      <head>
+        <title>طباعة فاتورة رقم ${invoice.invoiceNumber}</title>
+        <style>
+          body { font-family: Arial; padding: 20px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+          h2 { text-align: center; }
+        </style>
+      </head>
+      <body>
+        <h2>فاتورة رقم ${invoice.invoiceNumber}</h2>
+        <p><strong>التاريخ:</strong> ${invoice.date.slice(0, 10)}</p>
+        <p><strong>النوع:</strong> ${invoice.type === "P" ? "شراء" : "بيع"}</p>
+        <p><strong>${invoice.type === "P" ? "المورد" : "العميل"}:</strong> ${
+      invoice.userId?.name || ""
+    }</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>الصنف</th>
+              <th>الكمية</th>
+              <th>سعر</th>
+              <th>الاجمالي</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${invoice.items
+              .map(
+                (item) => `
+              <tr>
+                <td>${item.productId.name}</td>
+                <td>${item.quantity}</td>
+                <td>${
+                  invoice.type === "P" ? item.buyPrice : item.unitPrice
+                }</td>
+                <td>${invoice.finalPrice}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+
+        <p><strong>إجمالي السعر قبل الخصم:</strong> ${
+          invoice.finalPrice + invoice.discount
+        }</p>
+        <p><strong>الخصم:</strong> ${invoice.discount}</p>
+        <p><strong>الإجمالي بعد الخصم:</strong> ${invoice.finalPrice}</p>
+        <p><strong>المدفوع:</strong> ${invoice.totalPrice}</p>
+        <p><strong>المتبقي:</strong> ${invoice.remaining}</p>
+
+        <script>
+          window.onload = function() {
+            window.print();
+            window.onafterprint = function() {
+              window.close();
+            };
+          };
+        </script>
+      </body>
+    </html>
+  `;
+
+    printWindow.document.write(invoiceHTML);
+    printWindow.document.close();
+  };
 
   return (
     <>
@@ -52,8 +125,8 @@ const InvoicesTable = () => {
               <td>{invoice.invoiceNumber}</td>
               <td>{invoice.type === "P" ? "شراء" : "بيع"}</td>
               <td>
-                <Link to={`/user/${invoice.userId._id}`}>
-                  {invoice.userId.name}
+                <Link to={`/user/${invoice.userId?._id}`}>
+                  {invoice.userId?.name}
                 </Link>
               </td>
               <td>{invoice.items.map((item) => item.buyPrice)}</td>
@@ -76,6 +149,12 @@ const InvoicesTable = () => {
                     سدد
                   </button>
                 )}
+                <button
+                  className="primary sm"
+                  onClick={() => handlePrint(invoice)}
+                >
+                  طباعة
+                </button>
               </td>
             </tr>
           ))}

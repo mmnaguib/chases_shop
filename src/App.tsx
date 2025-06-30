@@ -9,6 +9,7 @@ import Items from "./pages/Items/Items";
 import { ToastContainer } from "react-toastify";
 import InvoicesTable from "./pages/Invoices/InvoicesTable";
 import UserInvoices from "./pages/Invoices/UserInvoices";
+import GetUsers from "./pages/ClientsAndVendors/GetAllUsers";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="sales" element={<Sales />} />
             <Route path="invoices" element={<InvoicesTable />} />
             <Route path="user/:id" element={<UserInvoices />} />
+            <Route path="users" element={<GetUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>
