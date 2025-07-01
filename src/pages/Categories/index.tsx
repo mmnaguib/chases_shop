@@ -11,7 +11,8 @@ const Categoies = () => {
     <>
       <h1 className="pageHeader">إدارة التصنيفات</h1>
       <button className="success" onClick={() => setIsOpen(!isOpen)}>
-        إضافة تصنيف جديد <FontAwesomeIcon icon={faPlus} />
+        <FontAwesomeIcon icon={faPlus} />
+        <span className="iconWithText">إضافة تصنيف جديد </span>
       </button>
       <CategoriesTable />
       <AddCategory isOpen={isOpen} setIsOpen={setIsOpen} />

@@ -12,6 +12,13 @@ const Sales = () => {
     <div>
       <h1 className="pageHeader">فاتورة بيع</h1>
       <div className="invoiceContainer">
+        <AddInvoice
+          invoiceType="S"
+          setfinalPrice={setfinalPrice}
+          setInvoiceItemsProp={setInvoiceItemsProp}
+          setDiscountValue={setDiscountValue}
+          discountValue={discountValue}
+        />
         <InvoiceSideBar
           invoiceType="S"
           finalPrice={finalPrice}
@@ -19,13 +26,6 @@ const Sales = () => {
           discountValue={discountValue}
           setAdminExpenses={setAdminExpenses}
           adminExpenses={adminExpenses}
-        />
-        <AddInvoice
-          invoiceType="S"
-          setfinalPrice={setfinalPrice}
-          setInvoiceItemsProp={setInvoiceItemsProp}
-          setDiscountValue={setDiscountValue}
-          discountValue={discountValue}
         />
       </div>
     </div>

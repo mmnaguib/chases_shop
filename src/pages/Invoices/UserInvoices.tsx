@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import InvoicesApi from "../../Api/invoiceApi";
 import { IInvoice } from "../../interfaces/inedx";
 import PaymentPopup from "./PaymentPopup";
+import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const UserInvoices = () => {
   const [userInvoices, setUserInvoices] = useState<IInvoice[]>([]);
-  const getUserInvoices = async (userId: string) => {
+  const { id } = useParams();
+  const getUserInvoices = useCallback(async (userId: string) => {
     const res = await InvoicesApi.getUserInvoices(userId);
     setUserInvoices(res.data);
-  };
+  }, []);
   const [selectedInvoice, setSelectedInvoice] = useState<IInvoice | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     getUserInvoices(id!);
-  }, []);
-  const { id } = useParams();
+  }, [id]);
   return (
     <div>
       <h5 style={{ margin: 0 }}>
@@ -59,7 +61,8 @@ const UserInvoices = () => {
                         setIsPopupOpen(true);
                       }}
                     >
-                      سدد
+                      <FontAwesomeIcon icon={faCheckDouble} />
+                      <span className="iconWithText">ادفع</span>
                     </button>
                   )}
                 </td>

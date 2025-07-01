@@ -1,11 +1,6 @@
-import {
-  faFile,
-  faMoneyBill,
-  faPlus,
-  faSave,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBill, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PaymentPopup from "./PaymentPopup";
 import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendorsPopup";
 import { IUser } from "../../interfaces/inedx";
@@ -37,17 +32,16 @@ const InvoiceSideBar = ({
 
   const [users, setUsers] = useState<IUser[]>([]);
   const [selectedUser, setSelectedUser] = useState("");
-  const getAllUsers = async () => {
+  const getAllUsers = useCallback(async () => {
     const res = await UsersApi.getAllByType(invoiceType === "P" ? "S" : "C");
     if (res.status === 200) {
       setUsers(res.data);
-      //setSelectedUser(res.data[0].name);
     }
-  };
+  }, [invoiceType]);
 
   useEffect(() => {
     getAllUsers();
-  }, []);
+  }, [getAllUsers]);
 
   const paymentPopupHandler = () => {
     if (finalPrice <= 0) {
@@ -62,7 +56,7 @@ const InvoiceSideBar = ({
   };
   return (
     <div className="invoice-sidebar">
-      <h4>البيانات الاساسية</h4>
+      <h4>المعلومات الاساسية</h4>
       <div>
         <label>تاريخ الفاتورة</label>
         <input

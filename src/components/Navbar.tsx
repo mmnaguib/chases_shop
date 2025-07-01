@@ -1,4 +1,13 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faBoxOpen,
+  faFileAlt,
+  faFileInvoiceDollar,
+  faHome,
+  faReceipt,
+  faTags,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -32,37 +41,44 @@ const Navbar = () => {
           <ul>
             <li>
               <NavLink to="/" onClick={toggleMenu}>
-                الصفحة الرئيسية
+                <FontAwesomeIcon icon={faHome} />
+                <span className="iconWithText">الصفحة الرئيسية</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/categories" onClick={toggleMenu}>
-                التصنيفات
+                <FontAwesomeIcon icon={faTags} />
+                <span className="iconWithText"> التصنيفات</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/items" onClick={toggleMenu}>
-                الاصناف
+                <FontAwesomeIcon icon={faBoxOpen} />
+                <span className="iconWithText"> الاصناف</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/purchases" onClick={toggleMenu}>
-                فاتورة شراء
+                <FontAwesomeIcon icon={faFileInvoiceDollar} />
+                <span className="iconWithText">فاتورة شراء</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/sales" onClick={toggleMenu}>
-                فاتورة بيع
+                <FontAwesomeIcon icon={faReceipt} />
+                <span className="iconWithText">الفاتورة بيع</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/invoices" onClick={toggleMenu}>
-                الفواتير
+                <FontAwesomeIcon icon={faFileAlt} />
+                <span className="iconWithText">الفواتير</span>
               </NavLink>
             </li>
             <li>
               <NavLink to="/users" onClick={toggleMenu}>
-                العملاء و الموردين
+                <FontAwesomeIcon icon={faUsers} />
+                <span className="iconWithText">العملاء و الموردين</span>
               </NavLink>
             </li>
           </ul>

@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UsersApi from "../../Api/userApi";
 import { IUser } from "../../interfaces/inedx";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faLocationPin,
+  faPhone,
+  faPlus,
+  faTrash,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import ClientsAndVendors from "./ClientsAndVendorsPopup";
 import { toast } from "react-toastify";
 
@@ -44,6 +51,7 @@ const GetAllUsers = () => {
 
   return (
     <>
+      <h1 className="pageHeader ">العملاء والموردين</h1>
       <div className="usersContent">
         <div>
           <h5>
@@ -62,11 +70,19 @@ const GetAllUsers = () => {
             {clients.map((client) => (
               <div className="user" key={client._id}>
                 <div className="info">
-                  <Link to={`/user/${client._id}`}>{client.name}</Link>
+                  <Link to={`/user/${client._id}`}>
+                    <FontAwesomeIcon icon={faUser} />
+                    <span className="iconWithText">{client.name}</span>
+                  </Link>
                   <br />
-                  {client.phone}
                   <br />
-                  {client.address}
+                  <FontAwesomeIcon icon={faPhone} />
+                  <span className="iconWithText">{client.phone}</span>
+                  <br />
+                  <br />
+
+                  <FontAwesomeIcon icon={faLocationPin} />
+                  <span className="iconWithText">{client.address}</span>
                 </div>
                 <div className="actions">
                   <button
@@ -107,11 +123,19 @@ const GetAllUsers = () => {
             {vendors.map((vendor) => (
               <div className="user" key={vendor._id}>
                 <div className="info">
-                  <Link to={`/user/${vendor._id}`}>{vendor.name}</Link>
+                  <Link to={`/user/${vendor._id}`}>
+                    <FontAwesomeIcon icon={faUser} />
+                    <span className="iconWithText">{vendor.name}</span>
+                  </Link>
                   <br />
-                  {vendor.phone}
                   <br />
-                  {vendor.address}
+                  <FontAwesomeIcon icon={faPhone} />
+                  <span className="iconWithText">{vendor.phone}</span>
+                  <br />
+                  <br />
+
+                  <FontAwesomeIcon icon={faLocationPin} />
+                  <span className="iconWithText">{vendor.address}</span>
                 </div>
                 <div className="actions">
                   <button

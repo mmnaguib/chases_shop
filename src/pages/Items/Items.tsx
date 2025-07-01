@@ -11,7 +11,8 @@ const Items = () => {
     <>
       <h1 className="pageHeader">إدارة المنتجات</h1>
       <button className="success" onClick={() => setIsOpen(!isOpen)}>
-        إضافة منتج جديد <FontAwesomeIcon icon={faPlus} />
+        <FontAwesomeIcon icon={faPlus} />
+        <span className="iconWithText">إضافة منتج جديد </span>
       </button>
       <ItemsTable />
       <AddItem isOpen={isOpen} setIsOpen={setIsOpen} />

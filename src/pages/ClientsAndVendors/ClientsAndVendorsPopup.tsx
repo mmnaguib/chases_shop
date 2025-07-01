@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import UsersApi from "../../Api/userApi";
 import { toast } from "react-toastify";
 import { IUser } from "../../interfaces/inedx";
+import { faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ClientsAndVendors = ({
   invoiceType,
@@ -115,7 +117,8 @@ const ClientsAndVendors = ({
                   />
                 </div>
                 <button className="success" type="submit">
-                  حفظ
+                  <FontAwesomeIcon icon={faSave} />
+                  <span className="iconWithText">حفظ</span>
                 </button>
               </form>
             </div>

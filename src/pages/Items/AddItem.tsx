@@ -3,6 +3,8 @@ import categoriesApi from "../../Api/categoriesApi";
 import { ICategory } from "../../interfaces/inedx";
 import itemsApi from "../../Api/itemsApi";
 import { toast } from "react-toastify";
+import { faCancel, faSave } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AddItem = ({
   isOpen,
@@ -121,7 +123,7 @@ const AddItem = ({
                   onChange={(e) => setsellPrice(+e.target.value)}
                 />
               </div>
-              <div>
+              <div style={{ display: "none" }}>
                 <label htmlFor="quantity">الكمية المتاحة</label>
                 <input
                   type="number"
@@ -133,14 +135,16 @@ const AddItem = ({
               </div>
 
               <button className="success" type="submit">
-                حفظ
+                <FontAwesomeIcon icon={faSave} />
+                <span className="iconWithText">حفظ</span>
               </button>
               <button
                 className="danger"
                 type="button"
                 onClick={() => setIsOpen(false)}
               >
-                إلغاء
+                <FontAwesomeIcon icon={faCancel} />
+                <span className="iconWithText">إلغاء</span>
               </button>
             </form>
           </div>

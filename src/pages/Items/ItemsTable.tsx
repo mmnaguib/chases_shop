@@ -46,7 +46,11 @@ const ItemsTable = () => {
             <tr key={item._id}>
               <td>{index + 1}</td>
               <td>
-                <img src={`http://localhost:5000/${item.image}`} width={30} />
+                <img
+                  src={`http://localhost:5000/${item.image}`}
+                  width={30}
+                  alt="product"
+                />
               </td>
               <td>{item.name}</td>
               <td>{item.buyPrice}</td>

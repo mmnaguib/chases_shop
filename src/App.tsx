@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import InvoicesTable from "./pages/Invoices/InvoicesTable";
 import UserInvoices from "./pages/Invoices/UserInvoices";
 import GetUsers from "./pages/ClientsAndVendors/GetAllUsers";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="invoices" element={<InvoicesTable />} />
             <Route path="user/:id" element={<UserInvoices />} />
             <Route path="users" element={<GetUsers />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

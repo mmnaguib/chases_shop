@@ -3,10 +3,16 @@ import InvoicesApi from "../../Api/invoiceApi";
 import { IInvoice } from "../../interfaces/inedx";
 import PaymentPopup from "./PaymentPopup";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowCircleRight,
+  faCheckDouble,
+  faPrint,
+} from "@fortawesome/free-solid-svg-icons";
 
 const InvoicesTable = () => {
   const [invoices, setInvoices] = useState<IInvoice[]>([]);
-  const [val, setVal] = useState("P");
+  const [val, setVal] = useState("S");
 
   const [selectedInvoice, setSelectedInvoice] = useState<IInvoice | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -95,10 +101,16 @@ const InvoicesTable = () => {
 
   return (
     <>
-      <select value={val} onChange={(e) => setVal(e.target.value)}>
-        <option value="P">فواتير الشراء</option>
-        <option value="S">فواتير البيع</option>
-      </select>
+      <h1 className="pageHeader" style={{ marginBottom: "20px" }}>
+        الفواتير
+      </h1>
+      <div style={{ width: "300px", marginBottom: "20px" }}>
+        <label>اختر نوع الفاتورة:</label>
+        <select value={val} onChange={(e) => setVal(e.target.value)}>
+          <option value="P">فواتير الشراء</option>
+          <option value="S">فواتير البيع</option>
+        </select>
+      </div>
       <div className="anyMobileTable">
         <table className="tableStyle" border={1}>
           <thead>
@@ -125,8 +137,12 @@ const InvoicesTable = () => {
                 <td>{invoice.invoiceNumber}</td>
                 <td>{invoice.type === "P" ? "شراء" : "بيع"}</td>
                 <td>
-                  <Link to={`/user/${invoice.userId?._id}`}>
-                    {invoice.userId?.name}
+                  <Link
+                    style={{ color: "#242478" }}
+                    to={`/user/${invoice.userId?._id}`}
+                  >
+                    <FontAwesomeIcon icon={faArrowCircleRight} />
+                    <span className="iconWithText">{invoice.userId.name}</span>
                   </Link>
                 </td>
                 <td>{invoice.items.map((item) => item.buyPrice)}</td>
@@ -146,14 +162,16 @@ const InvoicesTable = () => {
                         setIsPopupOpen(true);
                       }}
                     >
-                      سدد
+                      <FontAwesomeIcon icon={faCheckDouble} />
+                      <span className="iconWithText">ادفع</span>
                     </button>
                   )}
                   <button
                     className="primary sm"
                     onClick={() => handlePrint(invoice)}
                   >
-                    طباعة
+                    <FontAwesomeIcon icon={faPrint} />
+                    <span className="iconWithText">طباعة</span>
                   </button>
                 </td>
               </tr>

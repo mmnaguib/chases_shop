@@ -2,6 +2,12 @@ import { useState } from "react";
 import InvoicesApi from "../../Api/invoiceApi";
 import { IItem } from "../../interfaces/inedx";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCancel,
+  faCheckDouble,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons";
 
 type PaymentPopupProps = {
   isOpen: boolean;
@@ -96,7 +102,10 @@ const PaymentPopup = ({
     <div>
       {isOpen && (
         <div className="modalOverlay" onClick={() => setIsOpen(false)}>
-          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="modalContent paymentPopup"
+            onClick={(e) => e.stopPropagation()}
+          >
             <table className="tableStyle" border={1} style={{ marginTop: "0" }}>
               <thead>
                 <tr>
@@ -115,6 +124,7 @@ const PaymentPopup = ({
                         className="danger sm"
                         onClick={() => handleDeletePayment(index)}
                         title="حذف الدفعة"
+                        disabled={mode === "pay"}
                       >
                         x
                       </button>
@@ -141,25 +151,38 @@ const PaymentPopup = ({
                   </td>
                   <td>
                     <button className="edit sm" onClick={handleAddPayment}>
-                      سدد
+                      <FontAwesomeIcon icon={faCheckDouble} />
+                      <span className="iconWithText">ادفع</span>
                     </button>
                   </td>
-                  <td></td>
                 </tr>
               </tbody>
             </table>
 
-            <div>
-              المدفوع: {totalPaid}
-              <br />
-              الباقي: {remaining}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: "20px 0",
+              }}
+            >
+              <span style={{ color: "#080", fontWeight: "bold" }}>
+                المدفوع : {totalPaid} جنيه
+              </span>
+              <span style={{ color: "#f00", fontWeight: "bold" }}>
+                الباقي : {remaining} جنيه
+              </span>
             </div>
             <div>
               <button className="success" onClick={handleSaveInvoice}>
-                {mode === "create" ? "حفظ الفاتورة" : "تحديث السداد"}
+                <FontAwesomeIcon icon={faSave} />
+                <span className="iconWithText">
+                  {mode === "create" ? "حفظ الفاتورة" : "تحديث السداد"}
+                </span>
               </button>
               <button className="danger" onClick={() => setIsOpen(false)}>
-                إلغاء
+                <FontAwesomeIcon icon={faCancel} />
+                <span className="iconWithText">إلغاء</span>
               </button>
             </div>
           </div>

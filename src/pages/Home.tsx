@@ -1,7 +1,22 @@
 import { useEffect, useState } from "react";
 import DshaboardApi from "../Api/DashbaordApi";
-import InvoiceChart from "../components/Chart";
-
+import {
+  faUsers,
+  faTruck,
+  faFileInvoice,
+  faFileInvoiceDollar,
+  faCashRegister,
+  faShoppingCart,
+  faArrowDown,
+  faArrowUp,
+  faWallet,
+  faMoneyBillWave,
+  faChartLine,
+  faFileAlt,
+  faBoxes,
+  faTruckLoading,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Home = () => {
   const [clientsCount, setClientsCount] = useState<{
     type: string;
@@ -21,7 +36,7 @@ const Home = () => {
     count: number;
   }>({ type: "", count: 0 });
 
-  const [getTopProductsValues, setGetTopProductsValues] = useState<
+  const [, setGetTopProductsValues] = useState<
     {
       name: string;
       soldQuantity: number;
@@ -96,85 +111,134 @@ const Home = () => {
     getTopProducts();
   }, []);
   return (
-    <div className="homeDashboard">
-      <div className="card">
-        <h5>العملاء</h5>
-        <span>{clientsCount.count}</span>
-      </div>
-      <div className="card">
-        <h5>الموردين</h5>
-        <span>{suppliersCount.count}</span>
-      </div>
-      <div className="card">
-        <h5>فواتير الشراء</h5>
-        <span>{buyingsInvoiceCount.count}</span>
-      </div>
-      <div className="card">
-        <h5>فواتير البيع </h5>
-        <span>{sellingsInvoiceCount.count}</span>
-      </div>
+    <>
+      <h1 className="pageHeader ">لوحة التحكم</h1>
+      <div className="homeDashboard">
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faFileInvoiceDollar} />
+          </div>
+          <h5>فواتير البيع </h5>
+          <span>{sellingsInvoiceCount.count}</span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي المبيعات </h5>
-        <span>{solded.totalRevenue}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faCashRegister} />
+          </div>
+          <h5>اجمالي المبيعات </h5>
+          <span>{solded.totalRevenue}</span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي المدفوع ليا</h5>
-        <span>{solded.totalPaid}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faArrowUp} />
+          </div>
+          <h5>اجمالي المدفوع ليا</h5>
+          <span>{solded.totalPaid}</span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي المبالغ المتبقية ليا</h5>
-        <span>{solded.totalRemaining}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faMoneyBillWave} />
+          </div>
+          <h5>الاجمالي ليا</h5>
+          <span>{solded.totalRemaining}</span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي الكمية المباعة {solded.totalQuantity}</h5>
-        <>
-          {solded.topProducts.map((product) => (
-            <div key={product.name}>
-              {product.name} : {product.quantity}
-            </div>
-          ))}
-        </>
-      </div>
-      <div className="card">
-        <h5>اجمالي المشتريات </h5>
-        <span>{solded.totalPurchaseCost}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faBoxes} />
+          </div>
+          <h5>الكمية المباعة {solded.totalQuantity}</h5>
+          <>
+            {solded.topProducts.map((product) => (
+              <div key={product.name}>
+                {product.name} : {product.quantity}
+              </div>
+            ))}
+          </>
+        </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faFileInvoice} />
+          </div>
+          <h5>فواتير الشراء</h5>
+          <span>{buyingsInvoiceCount.count}</span>
+        </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faShoppingCart} />
+          </div>
+          <h5>اجمالي المشتريات </h5>
+          <span>{solded.totalPurchaseCost}</span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي المدفوع مني</h5>
-        <span>{solded.totalPurchaseCost - solded.totalPurchaseRemaining}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faArrowDown} />
+          </div>
+          <h5>اجمالي المدفوع مني</h5>
+          <span>
+            {solded.totalPurchaseCost - solded.totalPurchaseRemaining}
+          </span>
+        </div>
 
-      <div className="card">
-        <h5>اجمالي المبالغ المتبقية عليا</h5>
-        <span>{solded.totalPurchaseRemaining}</span>
-      </div>
-      <div className="card">
-        <h5>اجمالي الكمية المشتراه {solded.totalPurchasedQuantity}</h5>
-        <>
-          {solded.purchasedProducts.map((product) => (
-            <div key={product.name}>
-              {product.name} : {product.quantity}
-            </div>
-          ))}
-        </>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faWallet} />
+          </div>
+          <h5>الاجمالي عليا</h5>
+          <span>{solded.totalPurchaseRemaining}</span>
+        </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faTruckLoading} />
+          </div>
+          <h5>الكمية المشتراه {solded.totalPurchasedQuantity}</h5>
+          <>
+            {solded.purchasedProducts.map((product) => (
+              <div key={product.name}>
+                {product.name} : {product.quantity}
+              </div>
+            ))}
+          </>
+        </div>
 
-      <div className="card">
-        <h5>المصاريف الادارية </h5>
-        <span>{solded.adminExpenses}</span>
-      </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faFileAlt} />
+          </div>
+          <h5>المصاريف الادارية </h5>
+          <span>{solded.adminExpenses}</span>
+        </div>
 
-      <div className="card">
-        <h5>الربح </h5>
-        <span>{solded.netProfit}</span>
-      </div>
-      {/* <div className="card">
-        <h5>الاعلي مبيعاَ </h5>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faChartLine} />
+          </div>
+          <h5>الربح </h5>
+          <span>{solded.netProfit}</span>
+        </div>
+
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faUsers} />
+          </div>
+          <h5>العملاء</h5>
+          <span>{clientsCount.count}</span>
+        </div>
+        <div className="dashboard-card">
+          <div className="icon">
+            <FontAwesomeIcon icon={faTruck} />
+          </div>
+          <h5>الموردين</h5>
+          <span>{suppliersCount.count}</span>
+        </div>
+        {/* <div className="dashboard-card">
+        <div className="icon">
+          <FontAwesomeIcon icon={faUsers} />
+        </div><h5>الاعلي مبيعاَ </h5>
         {getTopProductsValues.map((product) => (
           <>
             <div>{product.name} </div>
@@ -184,8 +248,9 @@ const Home = () => {
         ))}
       </div> */}
 
-      <InvoiceChart data={getTopProductsValues} />
-    </div>
+        {/* <InvoiceChart data={getTopProductsValues} /> */}
+      </div>
+    </>
   );
 };
 

@@ -1,6 +1,8 @@
 import React from "react";
 import categoriesApi from "../../Api/categoriesApi";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCancel, faSave } from "@fortawesome/free-solid-svg-icons";
 
 const AddCategory = ({
   isOpen,
@@ -49,14 +51,16 @@ const AddCategory = ({
                 {error && <span className="form-error">{error}</span>}
               </div>
               <button className="success" type="submit">
-                حفظ
+                <FontAwesomeIcon icon={faSave} />
+                <span className="iconWithText">حفظ</span>
               </button>
               <button
                 className="danger"
                 type="button"
                 onClick={() => setIsOpen(false)}
               >
-                إلغاء
+                <FontAwesomeIcon icon={faCancel} />
+                <span className="iconWithText">إلغاء</span>
               </button>
             </form>
           </div>

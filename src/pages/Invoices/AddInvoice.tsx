@@ -1,7 +1,7 @@
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ICategory, IItem } from "../../interfaces/inedx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axiosInstance from "../../Api/axiosInstance";
 
 const AddInvoice = ({
@@ -35,7 +35,7 @@ const AddInvoice = ({
     }
   };
 
-  const getItems = async (categoryId: string) => {
+  const getItems = useCallback(async (categoryId: string) => {
     const res = await axiosInstance.get(
       `/products/categoryItems/${categoryId}`
     );
@@ -47,7 +47,7 @@ const AddInvoice = ({
       );
       setQuantityAvailabel(0);
     }
-  };
+  }, []);
 
   useEffect(() => {
     getCategories();
@@ -57,7 +57,7 @@ const AddInvoice = ({
     if (selectedCategoryId) {
       getItems(selectedCategoryId);
     }
-  }, [selectedCategoryId]);
+  }, [getItems, selectedCategoryId]);
 
   useEffect(() => {
     if (selectedItemId) {
@@ -82,7 +82,14 @@ const AddInvoice = ({
     setProfit(total - discountValue);
     setfinalPrice(total - discountValue);
     setInvoiceItemsProp(invoiceItems);
-  }, [invoiceItems, discountValue, invoiceType]);
+  }, [
+    setInvoiceItemsProp,
+    setInvoiceItemsProp,
+    setfinalPrice,
+    invoiceItems,
+    discountValue,
+    invoiceType,
+  ]);
 
   const addToGrid = () => {
     const selectedItem = items.find((item) => item._id === selectedItemId);
@@ -121,7 +128,7 @@ const AddInvoice = ({
   return (
     <div className="addInvoiceContent">
       <div className="addInvoiceHeader">
-        <h4>إضافة اضناف</h4>
+        <h4>إضافة الصنف الي الفاتورة</h4>
         <div className="addInvoiceContentToAdd">
           <div>
             <label htmlFor="categoryName">التصنيف</label>
@@ -161,7 +168,6 @@ const AddInvoice = ({
                 const newPrice = +e.target.value;
                 setPrice(newPrice);
 
-                // تعديل السعر في قاعدة البيانات
                 try {
                   const selectedItem = items.find(
                     (item) => item._id === selectedItemId
@@ -209,9 +215,10 @@ const AddInvoice = ({
             <button
               className="success"
               onClick={addToGrid}
-              disabled={invoiceType == "S" ? !quantityAvailabel : false}
+              disabled={invoiceType === "S" ? !quantityAvailabel : false}
             >
-              إضافة
+              <FontAwesomeIcon icon={faPlus} />
+              <span className="iconWithText">إضافة</span>
             </button>
           </div>
         </div>
@@ -278,7 +285,7 @@ const AddInvoice = ({
       </div>
 
       <div className="addInvoiceHeader" style={{ marginTop: "20px" }}>
-        <h4>قيم الفاتورة</h4>
+        <h4>الاجمالي</h4>
         <div className="addInvoiceContentToAdd">
           <div>
             <label htmlFor="itemsNumber">عدد الاصناف</label>
