@@ -217,7 +217,7 @@ const AddInvoice = ({
         </div>
       </div>
 
-      <div className="invoiceGrid">
+      <div className="anyMobileTable invoiceGrid">
         <table className="tableStyle" border={1}>
           <thead>
             <tr>

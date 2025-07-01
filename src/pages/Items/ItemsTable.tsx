@@ -28,7 +28,7 @@ const ItemsTable = () => {
     }
   };
   return (
-    <>
+    <div className="anyMobileTable">
       <table className="tableStyle" border={1}>
         <thead>
           <tr>
@@ -79,7 +79,7 @@ const ItemsTable = () => {
         ItemId={selectedCategoryId!}
         setItems={setItems}
       />
-    </>
+    </div>
   );
 };
 

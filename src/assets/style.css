@@ -83,7 +83,6 @@ table td {
 }
 .invoice-sidebar {
   width: 250px;
-  position: fixed;
   border: 1px solid #bce8f1;
   padding: 0 10px 10px;
   border-radius: 8px;
@@ -110,7 +109,6 @@ table td {
 
 .addInvoiceContent {
   width: calc(100% - 270px);
-  margin-right: 260px;
 }
 
 .addInvoiceHeader {
@@ -169,7 +167,7 @@ table td {
   font-size: 25px;
 }
 
-.usersContent{
+.usersContent {
   display: flex;
 }
 .usersContent > div {
@@ -177,11 +175,11 @@ table td {
   margin-left: 10px;
   border-left: 1px solid #f00;
 }
-.usersContent  h5{
+.usersContent h5 {
   display: flex;
   justify-content: space-between;
 }
-.usersContent .user{
+.usersContent .user {
   box-shadow: 0 0 5px 5px #eaeaea;
   margin-bottom: 15px;
   padding: 7px;
@@ -192,6 +190,78 @@ table td {
   justify-content: space-between;
 }
 
-.usersContent > div:last-of-type{
+.usersContent > div:last-of-type {
   border: 0;
+}
+.toggleSideBar {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+@media screen and (max-width: 500px) {
+  .navbar {
+    line-height: 60px;
+  }
+  nav ul {
+    position: absolute;
+    top: 80px;
+    background: #333;
+    flex-direction: column;
+    right: 0;
+    text-align: right;
+    gap: 0 !important;
+    margin: 0;
+    padding: 0 20px;
+    height: 100vh;
+    width: 200px;
+  }
+  .toggleSideBar {
+    display: block;
+  }
+  .homeDashboard {
+    gap: 10px;
+  }
+  .homeDashboard > .card {
+    min-width: 100%;
+  }
+  .pageHeader {
+    padding: 10px 25px;
+    margin-bottom: 20px;
+  }
+  table th,
+  table td {
+    white-space: nowrap !important;
+    padding: 0 5px;
+    font-size: 12px;
+  }
+  .contentOutlet {
+    padding: 20px 0;
+  }
+  .anyMobileTable {
+    overflow: auto;
+  }
+
+  .invoice-sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .invoice-sidebar h4 {
+    width: 107%;
+  }
+  .addInvoiceContent {
+    width: 100%;
+  }
+  .invoiceContainer,
+  .addInvoiceContentToAdd {
+    flex-direction: column;
+  }
+  .usersContent .user {
+    flex-direction: column;
+  }
+  .user .actions {
+    margin-top: 10px;
+  }
 }
