@@ -11,6 +11,9 @@ import InvoicesTable from "./pages/Invoices/InvoicesTable";
 import UserInvoices from "./pages/Invoices/UserInvoices";
 import GetUsers from "./pages/ClientsAndVendors/GetAllUsers";
 import { NotFoundPage } from "./pages/NotFoundPage";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import { GuestRoute, ProtectedRoute } from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -18,14 +21,79 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="items" element={<Items />} />
-            <Route path="categories" element={<Categoies />} />
-            <Route path="purchases" element={<Purchases />} />
-            <Route path="sales" element={<Sales />} />
-            <Route path="invoices" element={<InvoicesTable />} />
-            <Route path="user/:id" element={<UserInvoices />} />
-            <Route path="users" element={<GetUsers />} />
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="login"
+              element={
+                <GuestRoute>
+                  <Login />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="items"
+              element={
+                <ProtectedRoute>
+                  <Items />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="categories"
+              element={
+                <ProtectedRoute>
+                  <Categoies />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="purchases"
+              element={
+                <ProtectedRoute>
+                  <Purchases />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="sales"
+              element={
+                <ProtectedRoute>
+                  <Sales />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="invoices"
+              element={
+                <ProtectedRoute>
+                  <InvoicesTable />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="user/:id"
+              element={
+                <ProtectedRoute>
+                  <UserInvoices />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <ProtectedRoute>
+                  <GetUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="register" element={<Register />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>

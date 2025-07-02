@@ -4,16 +4,20 @@ import {
   faFileAlt,
   faFileInvoiceDollar,
   faHome,
+  faLock,
+  faLongArrowAltLeft,
   faReceipt,
+  faSignOut,
   faTags,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -29,6 +33,10 @@ const Navbar = () => {
   }, []);
 
   const shouldShowMenu = !isMobile || (isMobile && isOpen);
+  const handleLogout = () => {
+    localStorage.removeItem("aboda-shop-login");
+    navigate("/login");
+  };
   return (
     <div className="navbar">
       <FontAwesomeIcon
@@ -84,7 +92,10 @@ const Navbar = () => {
           </ul>
         )}
       </nav>
-      <h3>Aboda Shop</h3>
+      <div style={{ display: "flex", alignItems: "center", gap: "30px" }}>
+        <h3>Aboda Shop</h3>
+        <FontAwesomeIcon icon={faSignOut} onClick={handleLogout} />
+      </div>
     </div>
   );
 };

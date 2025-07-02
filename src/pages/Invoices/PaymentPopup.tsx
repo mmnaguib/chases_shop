@@ -87,6 +87,7 @@ const PaymentPopup = ({
     } else if (mode === "pay" && invoiceId) {
       const newPayments = localPayments.slice(payments.length);
       await InvoicesApi.payAgain(invoiceId, newPayments);
+      await InvoicesApi.getAllInvoices("S");
     }
 
     setIsOpen(false);
