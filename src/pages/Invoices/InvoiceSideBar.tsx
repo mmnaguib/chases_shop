@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import PaymentPopup from "./PaymentPopup";
 import ClientsAndVendors from "../ClientsAndVendors/ClientsAndVendorsPopup";
-import { IUser } from "../../interfaces/inedx";
+import { IItem, IUser } from "../../interfaces/inedx";
 import UsersApi from "../../Api/userApi";
+import InvoicesApi from "../../Api/invoiceApi";
 import { toast } from "react-toastify";
 
 const InvoiceSideBar = ({
@@ -26,12 +27,13 @@ const InvoiceSideBar = ({
     const today = new Date();
     return today.toISOString().split("T")[0];
   });
-  const [notes, setNotes] = React.useState<string>("");
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isNewClient, setIsNewClient] = useState(false);
 
+  const [notes, setNotes] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [isNewClient, setIsNewClient] = useState(false);
   const [users, setUsers] = useState<IUser[]>([]);
   const [selectedUser, setSelectedUser] = useState("");
+
   const getAllUsers = useCallback(async () => {
     const res = await UsersApi.getAllByType(invoiceType === "P" ? "S" : "C");
     if (res.status === 200) {
@@ -42,6 +44,45 @@ const InvoiceSideBar = ({
   useEffect(() => {
     getAllUsers();
   }, [getAllUsers]);
+
+  const invoiceItems = invoiceItemsProp
+    ? invoiceItemsProp.map((item: IItem) => ({
+        productId: item._id,
+        unitPrice: item.sellPrice,
+        buyPrice: item.buyPrice,
+        quantity: item.quantity,
+      }))
+    : [];
+
+  const handleSaveWithoutPayment = async () => {
+    if (finalPrice <= 0) {
+      toast.error("يجب ان يكون المبلغ اكبر من السعر");
+      return;
+    }
+    if (!selectedUser) {
+      toast.error("يجب إدخال اسم المستخدم");
+      return;
+    }
+
+    try {
+      await InvoicesApi.addNewInvoice(
+        invoiceType,
+        date,
+        selectedUser,
+        invoiceItems,
+        discountValue,
+        notes,
+        0, // totalPaid = 0
+        finalPrice,
+        [],
+        finalPrice, // remaining = full price
+        adminExpenses || 0
+      );
+      toast.success("تم حفظ الفاتورة بدون سداد");
+    } catch (err) {
+      toast.error("حدث خطأ أثناء حفظ الفاتورة");
+    }
+  };
 
   const paymentPopupHandler = () => {
     if (finalPrice <= 0) {
@@ -54,18 +95,20 @@ const InvoiceSideBar = ({
     }
     setIsOpen(true);
   };
+
   return (
     <div className="invoice-sidebar">
       <h4>المعلومات الاساسية</h4>
+
       <div>
         <label>تاريخ الفاتورة</label>
         <input
           type="date"
-          placeholder="رقم الفاتورة"
           value={date}
           onChange={(e) => setDate(e.target.value)}
         />
       </div>
+
       <div>
         <label>{invoiceType === "P" ? "المورد" : "العميل"}</label>
         <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
@@ -73,7 +116,7 @@ const InvoiceSideBar = ({
             value={selectedUser}
             onChange={(e) => setSelectedUser(e.target.value)}
           >
-            <option value="" selected disabled>
+            <option value="" disabled>
               اختر
             </option>
             {users.map((user) => (
@@ -91,6 +134,7 @@ const InvoiceSideBar = ({
           </button>
         </div>
       </div>
+
       <div>
         <label>ملاحظات</label>
         <textarea
@@ -110,8 +154,10 @@ const InvoiceSideBar = ({
           placeholder="مصروفات إدارية (شحن، بنزين...)"
         />
       </div>
+
       <br />
       <br />
+
       <div style={{ textAlign: "center" }}>
         <button
           className="success"
@@ -121,12 +167,19 @@ const InvoiceSideBar = ({
           <FontAwesomeIcon icon={faMoneyBill} /> سداد
         </button>
       </div>
+
       <br />
+
       <div style={{ textAlign: "center" }}>
-        <button className="edit" style={{ width: "150px" }}>
+        <button
+          className="edit"
+          style={{ width: "150px" }}
+          onClick={handleSaveWithoutPayment}
+        >
           <FontAwesomeIcon icon={faSave} /> حفظ
         </button>
       </div>
+
       <br />
 
       <PaymentPopup

@@ -79,10 +79,10 @@ const ClientsAndVendors = ({
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             <h2>
               {editData
-                ? invoiceType === "S"
+                ? invoiceType === "P"
                   ? "تعديل مورد"
                   : "تعديل عميل"
-                : invoiceType === "S"
+                : invoiceType === "P"
                 ? "إضافة مورد"
                 : "إضافة عميل"}
             </h2>
