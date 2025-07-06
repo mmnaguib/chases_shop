@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import axiosInstance from "../../Api/axiosInstance";
 import authImg from "../../assets/login.jpg";
 

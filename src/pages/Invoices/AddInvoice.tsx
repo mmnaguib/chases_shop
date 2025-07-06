@@ -51,7 +51,7 @@ const AddInvoice = ({
 
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [invoiceType]);
 
   useEffect(() => {
     if (selectedCategoryId) {

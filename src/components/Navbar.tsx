@@ -4,8 +4,6 @@ import {
   faFileAlt,
   faFileInvoiceDollar,
   faHome,
-  faLock,
-  faLongArrowAltLeft,
   faReceipt,
   faSignOut,
   faTags,
