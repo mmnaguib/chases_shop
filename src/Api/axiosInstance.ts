@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: `https://chasesshopback-production.up.railway.app/api/`,
+  baseURL: `http://localhost:5000/api/`,
   headers: {
     "Content-Type": "application/json",
   },
